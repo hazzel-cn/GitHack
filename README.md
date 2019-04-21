@@ -1,4 +1,6 @@
-# GitHack script
+# GitHack scripts
+
+Scripts implementing Git Hack with recursion algorithm.
 
 ### Usage
 
