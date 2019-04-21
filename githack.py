@@ -89,9 +89,10 @@ class GitHacker:
         data = self._request(url).read()
         data = zlib.decompress(data)
 
-        data = re.sub(r'blob \d+\00', '', data.decode())
-        with open(file_name, 'wb') as fp:
-            fp.write(data.encode())
+        if data[:4] == b'blob':
+            data = re.sub(r'blob \d+\00', '', data.decode())
+            with open(file_name, 'wb') as fp:
+                fp.write(data.encode())
 
     def analyze_tree_hash(self, tree_hash: str, commit_hash: str):
         """
@@ -107,13 +108,14 @@ class GitHacker:
         data = zlib.decompress(data)
 
         # Parse the data and extract blob hash, then call analyze_blob_hash().
-        split_tree = data.split('100644 '.encode())
-        for i in range(1, len(split_tree)):
-            t_name, hash_str = split_tree[i].split(b'\x00')
-            t_name = t_name.decode()
-            hash_str = binascii.b2a_hex(hash_str).decode()
+        if data[:4] == b'tree':
+            split_tree = data.split('100644 '.encode())
+            for i in range(1, len(split_tree)):
+                t_name, hash_str = split_tree[i].split(b'\x00')
+                t_name = t_name.decode()
+                hash_str = binascii.b2a_hex(hash_str).decode()
 
-            self.analyze_blob_hash(t_name, hash_str, commit_hash)
+                self.analyze_blob_hash(t_name, hash_str, commit_hash)
 
     def analyze_commit_hash(self, hash_str: str):
         """
