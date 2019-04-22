@@ -24,4 +24,4 @@ More details can be found in [https://www.hazzel.cn/2019/04/20/a-new-githack-scr
 
 ### Update log
 
-2019-4-21 Improve recursion implementation (BFS) and fix some bugs.
+2019-4-21 Improve recursion implementation (DFS) and fix some bugs.
