@@ -92,7 +92,7 @@ class GitHacker:
 
         # commit
         if data[:6] == b'commit':
-            print('[+] Analyze {} '.format(current_hash[-6:]))
+            print('[+] Analyze commit {} '.format(current_hash[-6:]))
 
             # create commit folder and save commit message.
             commit_hash = current_hash
@@ -117,7 +117,7 @@ class GitHacker:
                 self.analyze_object(current_hash=parent_hash_str)
 
         elif data[:4] == b'tree':
-            print('[+] Analyze {} -> {}'.format(commit_hash[-6:], tree_hash[-6:]))
+            print('[+] Analyze tree {} -> {}'.format(commit_hash[-6:], tree_hash[-6:]))
 
             # parse tree object and retrieve file names + file hashes
             split_tree = data.split('100644 '.encode())
@@ -133,7 +133,7 @@ class GitHacker:
                 self.analyze_object(current_hash=hash_str, commit_hash=commit_hash, tree_hash=current_hash, file_name=f_name)
 
         elif data[:4] == b'blob':
-            print('[+] Analyze {} -> {} -> {}'.format(commit_hash[-6:], tree_hash[-6:], current_hash[-6:]))
+            print('[+] Analyze blob {} -> {} -> {}'.format(commit_hash[-6:], tree_hash[-6:], current_hash[-6:]))
 
             # specify the file path and write data to the new file.
             commit_folder: str = '{workpath}/commit_{hash_str}'.format(workpath=self.workpath, hash_str=commit_hash[-6:])

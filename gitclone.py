@@ -112,7 +112,8 @@ class GitCloner:
         if data[:4] == b'tree':
             split_tree = data.split('100644 '.encode())
             for i in range(1, len(split_tree)):
-                file_hash = split_tree[i].split(b'\x00')[1]
+                pivot_idx = split_tree[i].find(b'\x00')
+                file_hash = split_tree[i][pivot_idx + 1:]
                 file_hash = binascii.b2a_hex(file_hash).decode()
                 self._get_object(file_hash)
 
@@ -164,7 +165,7 @@ class GitCloner:
 
 
 def test():
-    url = 'http://challenge.whuctf.com:8016/.git/'
+    url = 'http://192.168.64.2/GitHack/.git/'
 
     cloner = GitCloner(url)
     cloner.run()
@@ -181,4 +182,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    test()

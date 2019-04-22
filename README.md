@@ -15,6 +15,15 @@ python3 githack.py http://you.target/.git/
 python3 gitclone.py http://you.target/.git/
 ```
 
+### Screenshot
+
+githack.py
+![img](https://i0.wp.com/www.hazzel.cn/wp-content/uploads/2019/04/Screen-Shot-2019-04-21-at-11.44.49-PM.png?ssl=1)
+
+
+gitclone.py
+![img](https://i2.wp.com/www.hazzel.cn/wp-content/uploads/2019/04/Screen-Shot-2019-04-21-at-11.53.55-PM.png?ssl=1)
+
 ### Why this script
 
 Without installing git, you can exploit a Git source code leak.
