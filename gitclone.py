@@ -29,8 +29,10 @@ class GitCloner:
         try:
             return urllib.request.urlopen(self.request, timeout=10)
         except Exception as e:
-            print(e)
-            exit(-1)
+            # print(e)
+            # exit(-1)
+            print(e, url)
+            raise e
 
     def get_repo_index(self):
         """
@@ -88,6 +90,37 @@ class GitCloner:
         """
         commit_hash = self.head_hash
         self._get_object(commit_hash)
+
+    def get_repo_logs(self):
+        """
+        step 5: download logs
+            /logs/refs/heads/master
+            /logs/refs/remotes/origin/master
+        :return:
+        """
+        try:
+            url = '{base_url}logs/refs/heads/master'.format(base_url=self.base_url)
+            path = '{workpath}logs/refs/heads/'.format(workpath=self.workpath)
+            if not os.path.exists(path):
+                os.makedirs(path)
+
+            data = self._request(url).read()
+            with open('{path}master'.format(path=path), 'wb') as fp:
+                fp.write(data)
+        except: # I don't expect it.
+            pass
+
+        try:
+            url = '{base_url}logs/refs/remotes/origin/HEAD'.format(base_url=self.base_url)
+            path = '{workpath}logs/refs/remotes/origin/'.format(workpath=self.workpath)
+            if not os.path.exists(path):
+                os.makedirs(path)
+
+            data = self._request(url).read()
+            with open('{path}HEAD'.format(path=path), 'wb') as fp:
+                fp.write(data)
+        except: # I don't expect it neither.
+            pass
 
     def _get_object(self, hash_str):
         # download
@@ -159,13 +192,14 @@ class GitCloner:
         self.get_repo_HEAD()
         self.get_repo_branch()
         self.get_repo_objects()
+        self.get_repo_logs()
 
         self.try_to_make_it_better()
         print('[*] Finished. Check your repo at {}'.format(self.workpath))
 
 
 def test():
-    url = 'http://192.168.64.2/GitHack/.git/'
+    url = 'http://192.168.64.2/GitHacker/.git/'
 
     cloner = GitCloner(url)
     cloner.run()
